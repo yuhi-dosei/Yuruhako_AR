@@ -68,6 +68,8 @@ namespace GoogleARCore.Examples.HelloAR
         /// </summary>
         private bool m_IsQuitting = false;
 
+        private bool TappedCheck = false;
+
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
@@ -116,19 +118,28 @@ namespace GoogleARCore.Examples.HelloAR
                         prefab = AndyPlanePrefab;
                     }
 
-                    // Instantiate Andy model at the hit pose.
-                    var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+                    if(TappedCheck==false){
+                        
+                        // Instantiate Andy model at the hit pose.
+                        var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
-                    // Compensate for the hitPose rotation facing away from the raycast (i.e.
-                    // camera).
-                    andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
+                        // Compensate for the hitPose rotation facing away from the raycast (i.e.
+                        // camera).
+                        andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
 
-                    // Create an anchor to allow ARCore to track the hitpoint as understanding of
-                    // the physical world evolves.
-                    var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+                        // Create an anchor to allow ARCore to track the hitpoint as understanding of
+                        // the physical world evolves.
+                        var anchor = hit.Trackable.CreateAnchor(hit.Pose);
 
-                    // Make Andy model a child of the anchor.
-                    andyObject.transform.parent = anchor.transform;
+                        // Make Andy model a child of the anchor.
+                        andyObject.transform.parent = anchor.transform;
+
+                        TappedCheck = true;
+
+                    }
+                    else{
+                        return;
+                    }
                 }
             }
         }
